@@ -1,6 +1,6 @@
 # setup-cz
 
-> Github action to configure cz
+> Github action to only configure cz CLI
 
 ## Usage
 
