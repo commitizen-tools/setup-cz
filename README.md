@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-      - uses: actions/setup-cz@main
+      - uses: commitizen-tools/setup-cz@main
       - name: Set up git config
         run: |
           git config --global user.name "github-actions[bot]"

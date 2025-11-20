@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - uses: actions/setup-cz@main
+      - uses: commitizen-tools/setup-cz@main
       - id: bump-version
         run: |
           cz bump --yes --annotated-tag
