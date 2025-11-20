@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-installs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./
+      - name: Test it was installed
+        run: |
+          cz version
+  test-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./
+        with:
+          version: 4.0.0
+      - name: Test version matches
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const assert = require('node:assert/strict');
+            const czVersion = await exec.getExecOutput('cz', ['version']);
+            const expectedVersion = '4.0.0';
+            assert.equal(czVersion.stdout.trim(), expectedVersion);
+  test-extra-requirements:
+    strategy:
+      matrix:
+        extra_requirements:
+          - pip_name: cz-conventional-gitmoji
+            cz_name: cz_gitmoji
+          - pip_name: cz-kpn
+            cz_name: cz_kpn
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./
+        with:
+          extra_requirements: ${{ matrix.extra_requirements.pip_name }}
+      - name: Test extra requirements were installed
+        uses: actions/github-script@v8
+        env:
+          EXTRA_REQUIREMENTS: ${{ matrix.extra_requirements.cz_name }}
+        with:
+          script: |
+            const assert = require('node:assert/strict');
+            const extraRequirements = process.env.EXTRA_REQUIREMENTS;
+            const czList = await exec.getExecOutput('cz', ['ls']);
+            const allItems = czList.stdout.trim().split('\n');
+            const result = allItems.includes(extraRequirements);
+            assert.ok(result, `Expected ${extraRequirements} to be included in the list of installed cz plugins, but it was not.`);

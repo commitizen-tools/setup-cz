@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# nix
+.direnv
+result
+.envrc
+
+# python
+.venv/
+venv/

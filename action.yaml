@@ -1,0 +1,41 @@
+name: Setup commitizen CLI
+description: |
+  This workflow sets up the commitizen CLI for use in your GitHub workflows.
+  Unlike `commitizen-action`, this workflow only installs the CLI.
+  It does not automatically bump, commit or push changes.
+  This workflow, instead, gives more flexibility to the user by letting them
+  use the full range of commitizen commands.
+
+inputs:
+  version:
+    description: "Version of commitizen to install"
+    required: false
+    default: "latest"
+  extra_requirements:
+    description: "Install extra dependencies"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v6
+    - id: set-vars
+      shell: python
+      env:
+        COMMITIZEN_VERSION: ${{ inputs.version }}
+      run: |
+        import os
+        commitizen_version = os.environ.get("COMMITIZEN_VERSION", "").strip()
+        if commitizen_version == "latest":
+            set_commitizen_version = ""
+        else:
+            set_commitizen_version = f"=={commitizen_version}"
+        with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+            fh.write(f"COMMITIZEN_VERSION={set_commitizen_version}\n")
+    - name: Install commitizen
+      shell: bash
+      env:
+        COMMITIZEN_VERSION: ${{ steps.set-vars.outputs.COMMITIZEN_VERSION }}
+        EXTRA_REQUIREMENTS: ${{ inputs.extra_requirements }}
+      run: |
+        pip install -U commitizen${COMMITIZEN_VERSION} ${EXTRA_REQUIREMENTS}
