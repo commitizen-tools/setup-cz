@@ -1,0 +1,56 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Set up git config
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - uses: actions/setup-cz@main
+      - uses: pndurette/gh-actions-auto-docs@v1
+        with:
+          git_push: false
+      - id: bump-version
+        run: |
+          cz bump --yes
+          current_version="v$(cz version -p --current)"
+          major_version="v$(cz version -p --major)"
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          echo "major_version=$major_version" >> $GITHUB_OUTPUT
+      - name: Update major tag
+        env:
+          CURRENT_VERSION: ${{ steps.bump-version.outputs.current_version }}
+          MAJOR_VERSION: ${{ steps.bump-version.outputs.major_version }}
+        run: |
+          # Push new commit + new tag
+          git push --follow-tags
+
+          # Move major tag to the latest commit
+          git tag -fa "${MAJOR_VERSION}" -m "release ${CURRENT_VERSION}"
+
+          # Force push new major tag
+          git push origin "${MAJOR_VERSION}" -f
+      - name: Build changelog
+        env:
+          CURRENT_VERSION: ${{ steps.bump-version.outputs.current_version }}
+        run: |
+          cz changelog --dry-run "${CURRENT_VERSION}" > .changelog.md
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ".changelog.md"
+          tag_name: ${{ steps.bump-version.outputs.current_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
