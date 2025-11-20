@@ -37,6 +37,8 @@ jobs:
             cz_name: cz_gitmoji
           - pip_name: cz-kpn
             cz_name: cz_kpn
+          - pip_name: cz-kpn cz-conventional-gitmoji==0.7.0
+            cz_name: cz_kpn
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
