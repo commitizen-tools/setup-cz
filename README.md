@@ -28,4 +28,11 @@ jobs:
 ```
 
 <!--doc_begin-->
+## Inputs
+|Input|Description|Default|Required|
+|-----|-----------|-------|:------:|
+|`version`|Version of commitizen to install|`latest`|no|
+|`extra_requirements`|Install extra dependencies|n/a|no|
+## Outputs
+None
 <!--doc_end-->
