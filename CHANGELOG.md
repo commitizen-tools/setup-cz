@@ -1,3 +1,13 @@
+## v0.3.0 (2025-11-21)
+
+### Feat
+
+- **action**: add branding
+
+### Fix
+
+- **action**: 125 char description
+
 ## v0.2.1 (2025-11-21)
 
 ### Fix
