@@ -15,7 +15,7 @@ inputs:
     description: "Install extra dependencies"
     required: false
   cache:
-    description: 'Cache commitizen installation, set to "true" to enable'
+    description: 'Cache python setup, set to "true" to enable'
     required: false
     default: "false"
 
