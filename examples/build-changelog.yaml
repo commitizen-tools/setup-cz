@@ -1,0 +1,40 @@
+# Build the changelog for a given version with a manual trigger
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to build changelog for"
+        required: true
+        type: string
+  # You can also trigger this workflow from another workflow
+  workflow_call:
+    inputs:
+      version:
+        description: "Version to build changelog for"
+        required: true
+        type: string
+
+jobs:
+  build-changelog:
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.build-changelog.outputs.changelog }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: commitizen-tools/setup-cz@main
+      - name: Build changelog
+        env:
+          GIVEN_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          cz changelog --dry-run "${GIVEN_VERSION}" > .changelog.md
+      - name: Display changelog
+        run: |
+          cat .changelog.md
+          # You can send this file wherever you want:
+          #  - For a Github release
+          #  - Update a website
+          #  - Send it to a Slack channel
+          #  - Send it to a compliance tool
