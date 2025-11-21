@@ -1,3 +1,17 @@
+## v0.2.0 (2025-11-21)
+
+### Feat
+
+- **action**: enable cache
+- **examples**: add new build-changelog
+- **examples**: add new collect-version-info
+
+### Fix
+
+- **tests**: add a new test for a command
+- **example**: remove wrong parameter
+- exclude nix from language profile
+
 ## v0.1.0 (2025-11-20)
 
 ### Feat
