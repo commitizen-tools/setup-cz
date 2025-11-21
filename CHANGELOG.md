@@ -1,3 +1,9 @@
+## v0.4.0 (2025-11-21)
+
+### Feat
+
+- **examples**: add a new more in-depth example
+
 ## v0.3.0 (2025-11-21)
 
 ### Feat
