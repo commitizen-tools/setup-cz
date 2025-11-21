@@ -1,3 +1,9 @@
+## v0.4.1 (2025-11-21)
+
+### Fix
+
+- **docs**: remove workaround on diagram
+
 ## v0.4.0 (2025-11-21)
 
 ### Feat
