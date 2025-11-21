@@ -1,0 +1,51 @@
+# This action shows how to collect version information and propagate it to the next job.
+name: Collect Version Info
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  collect-version-info:
+    runs-on: ubuntu-latest
+    outputs:
+      current_version: ${{ steps.version-info.outputs.current_version }}
+      current_major_version: ${{ steps.version-info.outputs.current_major_version }}
+      current_minor_version: ${{ steps.version-info.outputs.current_minor_version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-tags: true # in case your version provider is cvs
+      - uses: commitizen-tools/setup-cz@main
+      - id: version-info
+        run: |
+          # Gather version information
+          current_version="$(cz version -p)"
+          current_major_version="$(cz version -p --major)"
+          current_minor_version="$(cz version -p --minor)"
+
+          # Set output variables
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          echo "current_major_version=$current_major_version" >> $GITHUB_OUTPUT
+          echo "current_minor_version=$current_minor_version" >> $GITHUB_OUTPUT
+  read-version-info:
+    runs-on: ubuntu-latest
+    needs: collect-version-info
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - run: |
+          # Read version information
+          current_version="${{ needs.collect-version-info.outputs.current_version }}"
+          current_major_version="${{ needs.collect-version-info.outputs.current_major_version }}"
+          current_minor_version="${{ needs.collect-version-info.outputs.current_minor_version }}"
+
+          # Print version information
+          echo "Current version: $current_version"
+          echo "Current major version: $current_major_version"
+          echo "Current minor version: $current_minor_version"
