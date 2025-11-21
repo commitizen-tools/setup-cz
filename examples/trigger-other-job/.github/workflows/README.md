@@ -21,13 +21,6 @@ flowchart LR
 
     subgraph TM["trigger-me"]
         echo_version["echo version"]
-        
-        %% Workaround to increase height of the graph
-        echo_version ~~~ spacer1[" "]:::hidden
-        spacer1 ~~~ spacer2[" "]:::hidden
-        spacer2 ~~~ spacer3[" "]:::hidden
-        spacer3 ~~~ spacer4[" "]:::hidden
-        spacer4 ~~~ spacer5[" "]:::hidden
     end
 
     BR --> TM
