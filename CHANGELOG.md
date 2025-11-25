@@ -1,3 +1,9 @@
+## v0.5.1 (2025-11-25)
+
+### Fix
+
+- use github-script which has more support than python shell
+
 ## v0.5.0 (2025-11-25)
 
 ### BREAKING CHANGE
