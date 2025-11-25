@@ -17,29 +17,24 @@ branding:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v6
     - id: set-vars
-      shell: python
+      uses: actions/github-script@v8
       env:
         COMMITIZEN_VERSION: ${{ inputs.version }}
         CACHE: ${{ inputs.cache }}
-      run: |
-        import os
+      with:
+        script: |
+          // Set commitizen version
+          const commitizenVersion = process.env.COMMITIZEN_VERSION || '';
+          const setCommitizenVersion = commitizenVersion === 'latest' ? '' : `==${commitizenVersion}`;
 
-        # Set commitizen version
-        commitizen_version = os.environ.get("COMMITIZEN_VERSION", "").strip()
-        if commitizen_version == "latest":
-            set_commitizen_version = ""
-        else:
-            set_commitizen_version = f"=={commitizen_version}"
-
-        # Write outputs
-        with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
-            fh.write(f"COMMITIZEN_VERSION={set_commitizen_version}\n")
+          // Write outputs
+          core.setOutput('commitizen-version', setCommitizenVersion);
+    - uses: actions/setup-python@v6
     - name: Install commitizen
       shell: bash
       env:
-        COMMITIZEN_VERSION: ${{ steps.set-vars.outputs.COMMITIZEN_VERSION }}
+        COMMITIZEN_VERSION: ${{ steps.set-vars.outputs.commitizen-version }}
         EXTRA_REQUIREMENTS: ${{ inputs.extra_requirements }}
       run: |
         pip install -U commitizen${COMMITIZEN_VERSION} ${EXTRA_REQUIREMENTS}
