@@ -9,10 +9,6 @@ inputs:
   extra_requirements:
     description: "Install extra dependencies"
     required: false
-  cache:
-    description: 'Cache python setup, set to "true" to enable'
-    required: false
-    default: "false"
 
 branding:
   icon: "anchor"
@@ -21,6 +17,7 @@ branding:
 runs:
   using: "composite"
   steps:
+    - uses: actions/setup-python@v6
     - id: set-vars
       shell: python
       env:
@@ -36,20 +33,9 @@ runs:
         else:
             set_commitizen_version = f"=={commitizen_version}"
 
-        # Set python cache
-        cache = os.environ.get("CACHE", "")
-        if cache == True or cache == "true":
-            set_cache = "pip"
-        else:
-            set_cache = ""
-
         # Write outputs
         with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
             fh.write(f"COMMITIZEN_VERSION={set_commitizen_version}\n")
-            fh.write(f"PYTHON_CACHE={set_cache}\n")
-    - uses: actions/setup-python@v6
-      with:
-        cache: ${{ steps.set-vars.outputs.PYTHON_CACHE }}
     - name: Install commitizen
       shell: bash
       env:
