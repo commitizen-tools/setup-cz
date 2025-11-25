@@ -37,4 +37,4 @@ runs:
         COMMITIZEN_VERSION: ${{ steps.set-vars.outputs.commitizen-version }}
         EXTRA_REQUIREMENTS: ${{ inputs.extra_requirements }}
       run: |
-        pip install -U commitizen${COMMITIZEN_VERSION} ${EXTRA_REQUIREMENTS}
+        python -m pip install -U commitizen${COMMITIZEN_VERSION} ${EXTRA_REQUIREMENTS}
