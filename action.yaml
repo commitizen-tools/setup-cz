@@ -9,6 +9,8 @@ inputs:
   extra_requirements:
     description: "Install extra dependencies"
     required: false
+  python-version:
+    description: "Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset. Passed directly to setup-python"
 
 branding:
   icon: "anchor"
@@ -31,6 +33,8 @@ runs:
           // Write outputs
           core.setOutput('commitizen-version', setCommitizenVersion);
     - uses: actions/setup-python@v6
+      with:
+        python-version: ${{ inputs.python-version }}
     - name: Install commitizen
       shell: bash
       env:

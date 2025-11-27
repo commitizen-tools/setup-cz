@@ -98,3 +98,16 @@ jobs:
           gh workflow run .github/workflows/trigger-me.yaml \
             --ref "${{ github.head_ref }}" \
             -f "version=${{ steps.get-version.outputs.current_version }}"
+  test-python-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: ./
+        with:
+          python-version: "3.13"
+      - id: get-version
+        run: |
+          python --version
+          cz version

@@ -21,6 +21,8 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - uses: commitizen-tools/setup-cz@main
+        with:
+          python-version: "3.x"
       - name: Set up git config
         run: |
           git config --global user.name "github-actions[bot]"
