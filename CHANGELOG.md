@@ -1,3 +1,9 @@
+## v0.6.0 (2025-11-27)
+
+### Feat
+
+- **inputs**: Expose python-version param
+
 ## v0.5.2 (2025-11-25)
 
 ### Fix

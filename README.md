@@ -39,6 +39,7 @@ jobs:
 |-----|-----------|-------|:------:|
 |`version`|Version of commitizen to install|`latest`|no|
 |`extra_requirements`|Install extra dependencies|n/a|no|
+|`python-version`|Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset. Passed directly to setup-python|n/a|no|
 ## Outputs
 None
 <!--doc_end-->
