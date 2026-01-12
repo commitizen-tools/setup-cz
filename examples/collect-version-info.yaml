@@ -18,7 +18,7 @@ jobs:
       current_minor_version: ${{ steps.version-info.outputs.current_minor_version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-tags: true # in case your version provider is cvs
       - uses: commitizen-tools/setup-cz@main
@@ -38,7 +38,7 @@ jobs:
     needs: collect-version-info
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - run: |
           # Read version information
           current_version="${{ needs.collect-version-info.outputs.current_version }}"

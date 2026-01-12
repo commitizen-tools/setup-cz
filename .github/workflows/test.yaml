@@ -9,7 +9,7 @@ jobs:
   test-installs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
       - name: Test it was installed
         run: |
@@ -17,7 +17,7 @@ jobs:
   test-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           version: 4.0.0
@@ -41,7 +41,7 @@ jobs:
             cz_name: cz_kpn
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           extra_requirements: ${{ matrix.extra_requirements.pip_name }}
@@ -60,7 +60,7 @@ jobs:
   test-get-changelog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./
@@ -82,7 +82,7 @@ jobs:
   test-trigger-other-job:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./
@@ -101,7 +101,7 @@ jobs:
   test-python-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./

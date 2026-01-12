@@ -16,17 +16,13 @@ jobs:
       contents: write
       actions: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
       - uses: commitizen-tools/setup-cz@main
         with:
           python-version: "3.x"
-      - name: Set up git config
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - run: |
           cz version -p
           cz bump --yes --annotated-tag
