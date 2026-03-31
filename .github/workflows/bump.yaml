@@ -23,32 +23,35 @@ jobs:
       - id: bump-version
         run: |
           cz bump --yes
-          current_version="v$(cz version -p)"
+
+          new_version="v$(cz version -p)"
           major_version="v$(cz version -p --major)"
-          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          new_version_tag="$(cz version -p --tag)"
+
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "major_version=$major_version" >> $GITHUB_OUTPUT
+          echo "new_version_tag=$new_version_tag" >> $GITHUB_OUTPUT
       - name: Update major tag
         env:
-          CURRENT_VERSION: ${{ steps.bump-version.outputs.current_version }}
+          NEW_VERSION: ${{ steps.bump-version.outputs.new_version }}
           MAJOR_VERSION: ${{ steps.bump-version.outputs.major_version }}
         run: |
           # Push new commit + new tag
           git push --follow-tags
 
           # Move major tag to the latest commit
-          git tag -fa "${MAJOR_VERSION}" -m "release ${CURRENT_VERSION}"
+          git tag -fa "${MAJOR_VERSION}" -m "release ${NEW_VERSION}"
 
           # Force push new major tag
           git push origin "${MAJOR_VERSION}" -f
       - name: Build changelog
         env:
-          CURRENT_VERSION: ${{ steps.bump-version.outputs.current_version }}
+          NEW_VERSION: ${{ steps.bump-version.outputs.new_version }}
         run: |
-          cz changelog --dry-run "${CURRENT_VERSION}" > .changelog.md
+          cz changelog --dry-run "${NEW_VERSION}" > .changelog.md
       - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: ".changelog.md"
-          tag_name: ${{ steps.bump-version.outputs.current_version }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          NEW_VERSION_TAG: ${{ steps.bump-version.outputs.new_version_tag }}
+        run: |
+          gh release create "${NEW_VERSION_TAG}" --notes-file .changelog.md
