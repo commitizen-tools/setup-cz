@@ -1,3 +1,12 @@
+## v0.7.1 (2026-03-31)
+
+### Fix
+
+- **ci**: use gh in our own release cycle
+- **nix**: bump flake.lock
+- **example**: use gh cli for release instead of external action
+- **examples**: improve trigger-other-job
+
 ## v0.7.0 (2026-01-12)
 
 ### Feat
