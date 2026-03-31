@@ -22,25 +22,30 @@ jobs:
           python-version: "3.x"
       - id: bump-version
         run: |
+          old_version="$(cz version -p)"
           cz bump --yes --annotated-tag
           git push --follow-tags
-          current_version="$(cz version -p)" # ATTENTION: You may have to add the v* at the beginning of the version
-          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          new_version="$(cz version -p)"
+          new_version_tag="$(cz version -p --tag)"
+
+          echo "old_version=$old_version" >> $GITHUB_OUTPUT
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+          echo "new_version_tag=$new_version_tag" >> $GITHUB_OUTPUT
       - name: Build changelog for Release
         env:
-          CURRENT_VERSION: ${{ steps.bump-version.outputs.current_version }}
+          NEW_VERSION: ${{ steps.bump-version.outputs.new_version }}
         run: |
-          cz changelog --dry-run "${CURRENT_VERSION}" > .changelog.md
+          cz changelog --dry-run "${NEW_VERSION}" > .changelog.md
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           body_path: ".changelog.md"
-          tag_name: ${{ steps.bump-version.outputs.current_version }}
+          tag_name: ${{ steps.bump-version.outputs.new_version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: trigger other workflow
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run .github/workflows/trigger-me.yaml \
-            -f "version=${{ steps.bump-version.outputs.current_version }}"
+          gh workflow run release.yaml \
+            -f "version=${{ steps.bump-version.outputs.new_version_tag }}"
