@@ -19,7 +19,7 @@ flowchart LR
         release --> workflow_dispatch
     end
 
-    subgraph TM["trigger-me"]
+    subgraph TM["release"]
         echo_version["echo version"]
     end
 
