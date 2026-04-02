@@ -24,9 +24,9 @@ jobs:
         run: |
           cz bump --yes --annotated-tag
           git push --follow-tags
-          new_version="$(cz version -p)" # ATTENTION: You may have to add the v* at the beginning of the version
-          new_version_tag="$(cz version -p --tag)"
+          new_version="$(cz version -p)"
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
+          new_version_tag="$(cz version -p --tag)"
           echo "new_version_tag=$new_version_tag" >> $GITHUB_OUTPUT
       - name: Build changelog for Release
         env:
