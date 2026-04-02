@@ -1,3 +1,15 @@
+## v0.8.0 (2026-04-02)
+
+### Feat
+
+- **input**: rename extra requirements to kebab case
+- Input `extra_requirements` has been renamed to `extra-requirement`
+to follow github actions conventions. The camel case version will be removed in v1
+
+### Fix
+
+- **examples**: Remove unnecesary comment
+
 ## v0.7.1 (2026-03-31)
 
 ### Fix

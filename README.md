@@ -34,7 +34,8 @@ jobs:
 |Input|Description|Default|Required|
 |-----|-----------|-------|:------:|
 |`version`|Version of commitizen to install|`latest`|no|
-|`extra_requirements`|Install extra dependencies|n/a|no|
+|`extra-requirements`|Install extra dependencies|n/a|no|
+|`extra_requirements`|DEPRECATED, use `extra-requirements` instead. Install extra dependencies|n/a|no|
 |`python-version`|Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset. Passed directly to setup-python|n/a|no|
 |`set-git-config`|Set git config|`true`|no|
 ## Outputs
