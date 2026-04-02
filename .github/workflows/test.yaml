@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./
         with:
-          extra_requirements: ${{ matrix.extra_requirements.pip_name }}
+          extra-requirements: ${{ matrix.extra_requirements.pip_name }}
       - name: Test extra requirements were installed
         uses: actions/github-script@v8
         env:

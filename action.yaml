@@ -6,8 +6,11 @@ inputs:
     description: "Version of commitizen to install"
     required: false
     default: "latest"
-  extra_requirements:
+  extra-requirements:
     description: "Install extra dependencies"
+    required: false
+  extra_requirements:
+    description: "DEPRECATED, use `extra-requirements` instead. Install extra dependencies"
     required: false
   python-version:
     description: "Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset. Passed directly to setup-python"
@@ -45,10 +48,14 @@ runs:
     - uses: actions/setup-python@v6
       with:
         python-version: ${{ inputs.python-version }}
+    - name: Check for deprecated input
+      shell: bash
+      if: ${{ inputs.extra_requirements && !inputs.extra-requirements }}
+      run: echo "::warning::The 'extra_requirements' input is deprecated. Please use 'extra-requirements' instead. It will be removed in v1"
     - name: Install commitizen
       shell: bash
       env:
         COMMITIZEN_VERSION: ${{ steps.set-vars.outputs.commitizen-version }}
-        EXTRA_REQUIREMENTS: ${{ inputs.extra_requirements }}
+        EXTRA_REQUIREMENTS: ${{ inputs.extra-requirements || inputs.extra_requirements }}
       run: |
         python -m pip install -U commitizen${COMMITIZEN_VERSION} ${EXTRA_REQUIREMENTS}
