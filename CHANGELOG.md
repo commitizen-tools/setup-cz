@@ -1,3 +1,9 @@
+## v0.9.0 (2026-04-07)
+
+### Feat
+
+- allow git user and email configuration
+
 ## v0.8.0 (2026-04-02)
 
 ### Feat
