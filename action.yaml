@@ -19,6 +19,14 @@ inputs:
     description: "Set git config"
     required: false
     default: "true"
+  git-user-name:
+    description: "Git user name"
+    required: false
+    default: "github-actions[bot]"
+  git-user-email:
+    description: "Git user email"
+    required: false
+    default: "41898282+github-actions[bot]@users.noreply.github.com"
 
 branding:
   icon: "anchor"
@@ -30,8 +38,8 @@ runs:
     - if: ${{ inputs.set-git-config == 'true' }}
       shell: bash
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "${{ inputs.git-user-name }}"
+        git config --global user.email "${{ inputs.git-user-email }}"
     - id: set-vars
       uses: actions/github-script@v8
       env:
