@@ -41,3 +41,18 @@ jobs:
 ## Outputs
 None
 <!--doc_end-->
+
+
+## Troubleshooting
+
+### A ruleset is blocking the release
+
+You have 2 options:
+
+1. Create a Github App (**recommended**)
+2. Create a Personal Access Token (PAT)
+
+A PAT is associated to your personal account, while the Github App is like a bot.
+Whichever you choose, you'll have to add it to the exemption list in the ruleset.
+
+For the Github App, you can find the instructions to create one in [Registering a Github App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) and a detail tutorial in [this discussion](https://github.com/orgs/community/discussions/25305#discussioncomment-8256560)
