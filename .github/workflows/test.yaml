@@ -81,6 +81,14 @@ jobs:
             assert.ok(changelogContent.includes('### Fix'), 'Expected changelog to contain a header for fixes');
   test-trigger-other-job:
     runs-on: ubuntu-latest
+    # Skip when the token will be read-only and `gh workflow run` would
+    # fail with HTTP 403 ("Resource not accessible by integration"):
+    #   - Fork PRs: GITHUB_TOKEN is always read-only on fork-originated PRs.
+    #   - Dependabot PRs: even though the branch is in the same repo, the
+    #     dependabot[bot] actor receives a restricted token by default.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
