@@ -23,7 +23,18 @@ jobs:
       - id: bump-version
         run: |
           old_version="$(cz version -p)"
-          cz bump --yes --annotated-tag
+          old_sha="$(git rev-parse HEAD)"
+          # Pass --no-raise 21 so that pushing only non-bump-eligible commits
+          # (e.g. docs:, ci:, build(deps):) does not fail the workflow.
+          cz bump --yes --annotated-tag --no-raise 21
+
+          if [ "$(git rev-parse HEAD)" = "$old_sha" ]; then
+            echo "No bump-eligible commits found, skipping release."
+            echo "bumped=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "bumped=true" >> $GITHUB_OUTPUT
           git push --follow-tags
           new_version="$(cz version -p)"
           new_version_tag="$(cz version -p --tag)"
@@ -32,17 +43,20 @@ jobs:
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_tag=$new_version_tag" >> $GITHUB_OUTPUT
       - name: Build changelog for Release
+        if: steps.bump-version.outputs.bumped == 'true'
         env:
           NEW_VERSION: ${{ steps.bump-version.outputs.new_version }}
         run: |
           cz changelog --dry-run "${NEW_VERSION}" > .changelog.md
       - name: Release
+        if: steps.bump-version.outputs.bumped == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           NEW_VERSION_TAG: ${{ steps.bump-version.outputs.new_version_tag }}
         run: |
           gh release create "${NEW_VERSION_TAG}" --notes-file .changelog.md
       - name: trigger other workflow
+        if: steps.bump-version.outputs.bumped == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
