@@ -3,9 +3,11 @@
 # version bumps before merging.
 #
 # Trigger: pull_request_target so the workflow has pull-requests: write
-# permission for fork PRs too. Only `cz bump --dry-run` is executed
-# against the checked-out PR commits — no PR-controlled scripts are run,
-# so this is safe.
+# permission. The job is gated to same-repo PRs only — fork PRs are
+# skipped because `cz bump` can render Jinja templates from the checked-out
+# workspace whenever `update_changelog_on_bump` is set in config, and we
+# don't want to execute fork-controlled templates with the workflow's
+# elevated permissions.
 name: PR bump preview
 
 on:
@@ -18,7 +20,12 @@ permissions:
 
 jobs:
   bump-preview:
-    if: ${{ github.event.pull_request.draft == false }}
+    if: >
+      ${{
+        github.event.pull_request.draft == false &&
+        github.event.pull_request.head.repo.full_name ==
+          github.event.pull_request.base.repo.full_name
+      }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out PR head
@@ -27,6 +34,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           fetch-tags: true
+          # Defense in depth: don't write the workflow token to .git/config.
+          persist-credentials: false
 
       - uses: commitizen-tools/setup-cz@main
         with:
