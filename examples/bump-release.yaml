@@ -23,9 +23,11 @@ jobs:
       - id: bump-version
         run: |
           old_sha="$(git rev-parse HEAD)"
-          # Pass --no-raise 21 so that pushing only non-bump-eligible commits
-          # (e.g. docs:, ci:, build(deps):) does not fail the workflow.
-          cz bump --yes --annotated-tag --no-raise 21
+          # Pass `--no-raise 21` so that pushing only non-bump-eligible commits
+          # (e.g. docs:, ci:, build(deps):) does not fail the workflow. Note
+          # that `--no-raise` is a top-level option and must come before the
+          # `bump` subcommand. Exit code 21 is NO_COMMITS_TO_BUMP.
+          cz --no-raise 21 bump --yes --annotated-tag
 
           if [ "$(git rev-parse HEAD)" = "$old_sha" ]; then
             echo "No bump-eligible commits found, skipping release."
