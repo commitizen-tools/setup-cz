@@ -22,7 +22,7 @@ jobs:
         with:
           version: 4.0.0
       - name: Test version matches
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const assert = require('node:assert/strict');
@@ -46,7 +46,7 @@ jobs:
         with:
           extra-requirements: ${{ matrix.extra_requirements.pip_name }}
       - name: Test extra requirements were installed
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           EXTRA_REQUIREMENTS: ${{ matrix.extra_requirements.cz_name }}
         with:
@@ -70,7 +70,7 @@ jobs:
         run: |
           cz changelog --dry-run "${GIVEN_VERSION}" > .changelog.md
       - name: Verify changelog content
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const assert = require('node:assert/strict');
