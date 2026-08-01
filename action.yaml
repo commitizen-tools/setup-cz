@@ -53,7 +53,7 @@ runs:
 
           // Write outputs
           core.setOutput('commitizen-version', setCommitizenVersion);
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ inputs.python-version }}
     - name: Check for deprecated input
